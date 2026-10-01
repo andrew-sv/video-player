@@ -1,26 +1,67 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-ink: #0c0c0d;
+  --color-panel: #17171a;
+  --color-line: #2a2a2e;
+  --color-paper: #f3efe7;
+  --color-muted: #a19c92;
+  --color-accent: #ff5a36;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-serif), ui-serif, Georgia, serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Subtitles: Shaka's UITextDisplayer renders cues into .shaka-text-container
+   (layout CSS normally comes from Shaka's UI stylesheet, which we don't use).
+   The user's style settings arrive as CSS variables on .player-root. */
+.player-root .shaka-text-container {
+  position: absolute;
+  inset: 0 5% var(--sub-offset, 5%);
+  pointer-events: none;
+  font-size: calc(var(--sub-scale, 1) * clamp(16px, 2.4vw, 44px));
+  line-height: 1.35;
+  transition: bottom 200ms ease;
+}
+.player-root .shaka-text-container * {
+  font-size: inherit !important;
+  color: var(--sub-color) !important;
+  font-family: var(--sub-font) !important;
+  text-shadow: var(--sub-edge) !important;
+  background-color: transparent !important;
+}
+.player-root .shaka-text-container span:not(:has(span)) {
+  background-color: var(--sub-bg) !important;
+  padding: 0.05em 0.3em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
 }
